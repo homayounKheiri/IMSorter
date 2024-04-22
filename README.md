@@ -5,7 +5,7 @@ A simple imports sorter according to your taste!
 IMSorter reads a config file and searches for all ```imports``` in the active document and collects and sorts them on top of it.
 
 ### Demo
-![alt text]()
+![alt text](https://github.com/homayounKheiri/IMSorter/blob/master/src/assets/img/demo.gif)
  
 
 **Note 1:** IMSorter currently is suitable for ```import``` lines in these shapes: 
