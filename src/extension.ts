@@ -32,7 +32,32 @@ async function sortImports() {
 
 			const document = editor.document;
 			const text = document.getText();
-			const lines = text.split('\n');
+			const tempLines = text.split('\n');
+
+			const lines = [...tempLines];
+
+			lines.forEach((line, i, arr) => {
+				if (line.startsWith("import")) {
+					let numOfOpenParenthesis;
+					let numOfCloseParenthesis;
+
+					while (true) {
+						numOfOpenParenthesis = lines[i].split("{").length - 1;
+						numOfCloseParenthesis = lines[i].split("}").length - 1;
+
+						const condition = 
+							numOfOpenParenthesis > numOfCloseParenthesis ||
+							lines[i + 1]?.trim().startsWith("from");
+							
+						if (condition && i < lines.length - 1) {
+							lines[i] = lines[i].trim() + " " + lines.splice(i + 1, 1).join().trim();
+						}
+						else {
+							break;
+						}
+					}
+				}
+			});
 
 			const imports = lines.filter(line => line.trim().startsWith('import'));
 
@@ -76,7 +101,7 @@ async function sortImports() {
 	}
 }
 
-function mylog(...log: string[]) {
+function mylog(...log: any[]) {
 	console.log("MYLOG", ...log)
 }
 

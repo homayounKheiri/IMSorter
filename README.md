@@ -1,71 +1,89 @@
-# IMSorter README
 
-This is the README for your extension "IMSorter". After writing up a brief description, we recommend including the following sections.
+# IMSorter
+A simple imports sorter according to your taste!
 
-## Features
+IMSorter reads a config file and searches for all ```imports``` in the active document and collects and sorts them on top of it.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Demo
+![alt text]()
+ 
 
-For example if there is an image subfolder under your extension project workspace:
+**Note 1:** IMSorter currently is suitable for ```import``` lines in these shapes: 
 
-\!\[feature X\]\(images/feature-x.png\)
+```
+import { a } from "lib"
+```
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+```
+import a from "lib"
+```
 
-## Requirements
+```
+import * as a from "lib"
+```
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```
+import {
+    a, b
+} from "lib"
+```
 
-## Extension Settings
+```
+...
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+**Note 2:** ```require``` not supprted.
 
-For example:
 
-This extension contributes the following settings:
+### Usage: 
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+1- Install IMSorter.
 
-## Known Issues
+2- Add **imsorter.json** (config file) in root and configur it.
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+3- Open a file you want to sort ```imports```,
 
-## Release Notes
+4- Open command pallet (ctrl+shift+p) and enter **IMSorter**.
 
-Users appreciate release notes as you update your extension.
+5- WoW!
 
-### 1.0.0
+### Setting Config File:
 
-Initial release of ...
+Add all or some of ```import``` directory in order you want, like this: 
 
-### 1.0.1
+```
+{
+    importsKey: [
+        "react",         //order 1
+        "axios",         //order 2
+        "./api"          //order 3
+        "../components"  //order 4
+        "@/assets/img"   //order 5
+    ]
+}
+```
 
-Fixed issue #.
+### Example:
 
-### 1.1.0
+These ```imports```:
+```
+import line1 from @/assets/img/lines-1.png";
+import React, { useEffect, useState } from "react";
+import { IconButton } from "../components/buttons/IconButton"
+import line2 from "@/assets/img/lines-2.png";
+import axios from "axios";
+import { IconInput } from "../components/Inputs/IconInput"
+```
 
-Added features X, Y, and Z.
+Sorted To:
+```
+import React, { useEffect, useState } from "react";
 
----
+import axios from "axios";
 
-## Following extension guidelines
+import { IconButton } from "../components/buttons/IconButton"
+import { IconInput } from "../components/Inputs/IconInput"
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+import line1 from @/assets/img/lines-1.png";
+import line2 from "@/assets/img/lines-2.png";
+```

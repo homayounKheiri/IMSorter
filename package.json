@@ -19,6 +19,7 @@
       }
     ]
   },
+  "icon": "./src/assets/img/ext-icon.png",
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
