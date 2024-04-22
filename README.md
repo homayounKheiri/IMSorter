@@ -4,28 +4,21 @@ A simple imports sorter according to your taste!
 
 IMSorter reads a config file and searches for all ```imports``` in the active document and collects and sorts them on top of it.
 
-### **Demo:**
-![alt text](https://github.com/homayounKheiri/IMSorter/blob/master/public/img/demo.gif)
-
 <br/>
 
 **Note 1:** IMSorter currently is suitable for ```import``` lines in these shapes: 
 
 ```javascript
 import { a } from "lib"
-```
-```javascript
+
 import a from "lib"
-```
-```javascript
+
 import * as a from "lib"
-```
-```javascript
+
 import {
     a, b
 } from "lib"
-```
-```
+
 ...
 ```
 
@@ -53,7 +46,7 @@ Add all or some of ```import``` directory in order you want, like this:
 
 ```json
 {
-    importsKey: [
+    "importsKey": [
         "react",         //order 1
         "axios",         //order 2
         "./api"          //order 3
@@ -68,7 +61,7 @@ Add all or some of ```import``` directory in order you want, like this:
 
 These ```imports```:
 ```js
-import line1 from @/assets/img/lines-1.png";
+import line1 from "@/assets/img/lines-1.png";
 import React, { useEffect, useState } from "react";
 import { IconButton } from "../components/buttons/IconButton";
 import line2 from "@/assets/img/lines-2.png";
@@ -85,6 +78,6 @@ import axios from "axios";
 import { IconButton } from "../components/buttons/IconButton"
 import { IconInput } from "../components/Inputs/IconInput"
 
-import line1 from @/assets/img/lines-1.png";
+import line1 from "@/assets/img/lines-1.png";
 import line2 from "@/assets/img/lines-2.png";
 ```
