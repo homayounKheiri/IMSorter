@@ -2,27 +2,23 @@
 # IMSorter
 A simple imports sorter according to your taste!
 
-IMSorter reads a config file and searches for all ```imports``` in the active document and collects and sorts them on top of it.
+IMSorter reads a configuration file and searches for all ```import``` statements in the active document, then collects and sorts them at the beginning of the active document.
 
 <br/>
 
-**Note 1:** IMSorter currently is suitable for ```import``` lines in these shapes: 
+**Note 1:** IMSorter currently supports ```import``` statements in the following formats:
 
 ```javascript
 import { a } from "lib"
-
 import a from "lib"
-
 import * as a from "lib"
-
 import {
     a, b
 } from "lib"
-
 ...
 ```
 
-**Note 2:** ```require``` not supprted.
+**Note 2:** ```require``` statements are not currently supported.
 
 <br/>
 
@@ -30,19 +26,19 @@ import {
 
 1- Install IMSorter.
 
-2- Add **imsorter.json** (config file) in root and configur it.
+2- Add an ***imsorter.json*** configuration file in the root directory of your project.
 
-3- Open a file you want to sort ```imports```,
+3- Open the file you want to sort ```imports``` in.
 
-4- Open command pallet (ctrl+shift+p) and enter **IMSorter**.
+4- Open the command palette (Ctrl+Shift+P) and enter ***IMSorter***.
 
 5- WoW!
 
 <br/>
 
-### **Setting Config File:**
+### **Configuration File Setup:**
 
-Add all or some of ```import``` directory in order you want, like this: 
+The IMSorter config file is a JSON object with an "importsKey" array. Add directories/libraries in the desired order, like this:
 
 ```json
 {
