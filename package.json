@@ -1,8 +1,9 @@
 {
   "name": "IMSorter",
   "displayName": "IMSorter",
-  "description": "imports sorter",
-  "version": "0.0.1",
+  "description": "A Customizable Imports Sorter",
+  "publisher": "homayounKh",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.88.0"
   },
@@ -19,7 +20,7 @@
       }
     ]
   },
-  "icon": "./src/assets/img/ext-icon.png",
+  "icon": "./public/img/ext-icon.png",
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
