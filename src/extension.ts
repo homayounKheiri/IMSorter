@@ -8,13 +8,13 @@ type TConfig = {
 
 function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('IMSorter.sorter', () => {
-			sortImports();
+		doIt();
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-async function sortImports() {
+async function doIt() {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) {
 			vscode.window.showErrorMessage('No active editor found.');
@@ -34,56 +34,11 @@ async function sortImports() {
 			const text = document.getText();
 			const tempLines = text.split('\n');
 
-			const lines = [...tempLines];
-
-			lines.forEach((line, i, arr) => {
-				if (line.startsWith("import")) {
-					let numOfOpenParenthesis;
-					let numOfCloseParenthesis;
-
-					while (true) {
-						numOfOpenParenthesis = lines[i].split("{").length - 1;
-						numOfCloseParenthesis = lines[i].split("}").length - 1;
-
-						const condition = 
-							numOfOpenParenthesis > numOfCloseParenthesis ||
-							lines[i + 1]?.trim().startsWith("from");
-							
-						if (condition && i < lines.length - 1) {
-							lines[i] = lines[i].trim() + " " + lines.splice(i + 1, 1).join().trim();
-						}
-						else {
-							break;
-						}
-					}
-				}
-			});
+			const lines = cleanImports([...tempLines]);
 
 			const imports = lines.filter(line => line.trim().startsWith('import'));
-
-			const sortedImports = imports.sort((a, b) => {
-					let tempIndex = -1;
-					
-					tempIndex = importsKey.findIndex(key => a.includes(key));
-					const indexA = tempIndex > -1 ? tempIndex : importsKey.length;
-					
-					tempIndex = importsKey.findIndex(key => b.includes(key));
-					const indexB = tempIndex > -1 ? tempIndex : importsKey.length;
-					return indexA - indexB;
-			});
-
-			let sortedText = '';
-			let currentKeyIndex = -1;
-			for (const imp of sortedImports) {
-					const index = importsKey.findIndex(key => imp.includes(key));
-					if (index !== currentKeyIndex) {
-							if (currentKeyIndex !== -1) {
-									sortedText += '\n';
-							}
-							currentKeyIndex = index;
-					}
-					sortedText += imp.trim() + '\n';
-			}
+			const sortedImports = sortImports(imports, importsKey);
+			let sortedText = groupImports(sortedImports, importsKey);
 
 			const mainLines = lines.filter(line => !line.trim().startsWith("import") );
 			const resultText = sortedText + '\n' + mainLines.join('\n').trim();
@@ -98,6 +53,90 @@ async function sortImports() {
 			vscode.window.showInformationMessage('Imports sorted successfully.');
 	} catch (error) {
 			vscode.window.showErrorMessage('IMSorter Config File not Found or Is Invalid.');
+	}
+}
+
+function cleanImports(lines: string[]) {
+	lines.forEach((line, i, arr) => {
+		if (line.startsWith("import")) {
+			let numOfOpenParenthesis;
+			let numOfCloseParenthesis;
+
+			while (true) {
+				numOfOpenParenthesis = lines[i].split("{").length - 1;
+				numOfCloseParenthesis = lines[i].split("}").length - 1;
+
+				const condition = numOfOpenParenthesis > numOfCloseParenthesis ||
+					lines[i + 1]?.trim().startsWith("from");
+
+				if (condition && i < lines.length - 1) {
+					lines[i] = lines[i].trim() + " " + lines.splice(i + 1, 1).join().trim();
+				}
+				else {
+					break;
+				}
+			}
+		}
+	});
+	return lines;
+}
+
+function sortImports(imports: string[], importsKey: string[]) {
+	return imports.sort((_a, _b) => {
+		let tempIndex = -1;
+
+
+		const a = extractDirectoryFromString(_a);
+		const b = extractDirectoryFromString(_b);
+		
+		tempIndex = importsKey.findIndex(key => !!a.match(verifyRgx(key))?.length);
+		const indexA = tempIndex > -1 ? tempIndex : importsKey.length;
+		
+		tempIndex = importsKey.findIndex(key => !!b.match(verifyRgx(key))?.length);
+		const indexB = tempIndex > -1 ? tempIndex : importsKey.length;
+		return indexA - indexB;
+});
+}
+
+function extractDirectoryFromString(str: string) {
+	let pattern = /(["'])(.*?)\1/;
+	let match = str.match(pattern);
+	
+	if (match && match[2]) {
+			return match[2];
+	} else {
+			return str;
+	}
+}
+
+function groupImports(sortedImports: string[], importsKey: string[]) {
+	let sortedText = '';
+	let currentKeyIndex = -1;
+	for (const _imp of sortedImports) {
+		const imp = extractDirectoryFromString(_imp);
+
+		const index = importsKey.findIndex(key => imp.match(verifyRgx(key))?.length);
+		if (index !== currentKeyIndex) {
+			if (currentKeyIndex !== -1) {
+				sortedText += '\n';
+			}
+			currentKeyIndex = index;
+		}
+		sortedText += _imp.trim() + '\n';
+	}
+	return sortedText;
+}
+
+function isStringRgx(term: string) {
+	return new RegExp(term) !== null;
+}
+
+function verifyRgx(term: string) {
+	if (isStringRgx(term)) {
+		return new RegExp(term);
+	}
+	else {
+		return term;
 	}
 }
 
