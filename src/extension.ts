@@ -3,7 +3,6 @@ import fs from 'fs';
 
 type TConfig = {
 	importsKey: string[];
-	// divider: string;
 };
 
 function activate(context: vscode.ExtensionContext) {
@@ -21,14 +20,12 @@ async function doIt() {
 			return;
 	}
 
-	const configPath = vscode.workspace.rootPath + '/imsorter.json';
+	const configPath = vscode.workspace.rootPath + '/imsorter.js';
 	try {
 			const configFile = fs.readFileSync(configPath, 'utf-8');
-
-			const config: TConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+			const config: TConfig = eval(configFile);
 
 			const importsKey = config.importsKey;
-			// const divider = config.divider;
 
 			const document = editor.document;
 			const text = document.getText();
@@ -52,7 +49,8 @@ async function doIt() {
 
 			vscode.window.showInformationMessage('Imports sorted successfully.');
 	} catch (error) {
-			vscode.window.showErrorMessage('IMSorter Config File not Found or Is Invalid.');
+		mylog(error)
+		vscode.window.showErrorMessage('IMSorter Config File not Found or Is Invalid.');
 	}
 }
 
@@ -84,7 +82,6 @@ function cleanImports(lines: string[]) {
 function sortImports(imports: string[], importsKey: string[]) {
 	return imports.sort((_a, _b) => {
 		let tempIndex = -1;
-
 
 		const a = extractDirectoryFromString(_a);
 		const b = extractDirectoryFromString(_b);
@@ -127,17 +124,8 @@ function groupImports(sortedImports: string[], importsKey: string[]) {
 	return sortedText;
 }
 
-function isStringRgx(term: string) {
-	return new RegExp(term) !== null;
-}
-
 function verifyRgx(term: string) {
-	if (isStringRgx(term)) {
-		return new RegExp(term);
-	}
-	else {
-		return term;
-	}
+	return new RegExp(term) || term;
 }
 
 function mylog(...log: any[]) {
