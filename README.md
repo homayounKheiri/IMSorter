@@ -26,7 +26,7 @@ import {
 
 1- Install IMSorter.
 
-2- Add an ***imsorter.json*** configuration file in the root directory of your project.
+2- Add an ***imsorter.js*** configuration file in the root directory of your project and configure it.
 
 3- Open the file you want to sort ```imports``` in.
 
@@ -38,16 +38,17 @@ import {
 
 ### **Configuration File Setup:**
 
-The IMSorter config file is a JSON object with an "importsKey" array. Add directories/libraries in the desired order, like this:
+The IMSorter config file is a JS Module with an "importsKey" array. Add directories/libraries as regex or string in the desired order, like this:
 
-```json
-{
+```js
+module.exports = {
     "importsKey": [
-        "react",         //order 1
-        "axios",         //order 2
-        "./api"          //order 3
-        "../components"  //order 4
-        "@/assets/img"   //order 5
+        /^react$/,            //order 1
+        /^react*/,            //order 2
+        "axios",              //order 3
+        "./api",              //order 4
+        /\.\.\/components*/,  //order 5
+        "assets/img"          //order 6
     ]
 }
 ```
@@ -62,6 +63,7 @@ import React, { useEffect, useState } from "react";
 import { IconButton } from "../components/buttons/IconButton";
 import line2 from "@/assets/img/lines-2.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { IconInput } from "../components/Inputs/IconInput";
 ```
 
@@ -69,9 +71,11 @@ Sorted To:
 ```js
 import React, { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
-import { IconButton } from "../components/buttons/IconButton"
+import { IconButton } from "../components/Buttons/IconButton"
 import { IconInput } from "../components/Inputs/IconInput"
 
 import line1 from "@/assets/img/lines-1.png";
