@@ -2,6 +2,12 @@
 
 All notable changes to the "IMSorter" extension will be documented in this file.
 
+## [1.2.2]
+
+### Fixed 
+
+- Change icon
+
 ## [1.2.1]
 
 ### Fixed 
